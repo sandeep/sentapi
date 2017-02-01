@@ -12,14 +12,26 @@ app = Flask(__name__)
 api = Api(app)
 
 parser = reqparse.RequestParser()
-parser.add_argument('text', type=str, help='Text Blob for sentiment analysis')
+parser.add_argument('text', required =True, type=str, help='Requires text attribute. Returns a polarity, subjectivity score for the given sentence, based on the adjectives it contains, where polarity is a value between -1.0 and +1.0 and subjectivity between 0.0 and 1.0. ')
 
 class Sentiment(Resource):
+	def get(self):
+		args = parser.parse_args()
+
+		return
+
 	def post(self):
 		args = parser.parse_args()
-		q= sentiment(str(args['text']))
-		print q
-		return {'sentiment': q}
+		#we should sanitize this.
+		messageSentiment = sentiment(str(args['text']))
+
+		print messageSentiment[0]
+		return {'sentiment':
+		{
+			'polarity': messageSentiment[0],
+			'subjectivity': messageSentiment[1]
+		}
+		}
 
 api.add_resource(Sentiment, '/')
 
